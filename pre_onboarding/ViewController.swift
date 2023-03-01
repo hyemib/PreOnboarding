@@ -13,6 +13,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     private let tableView = UITableView()
     private let loadAllButton = UIButton()
 
+
     override func viewDidLoad() {
         super.viewDidLoad()
             
@@ -30,12 +31,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.separatorStyle = .none
         tableView.isScrollEnabled = false
         tableView.register(ImageCell.self, forCellReuseIdentifier: "imageCell")
-        
+       
         loadAllButton.setTitle("Load All Images", for: .normal)
         loadAllButton.backgroundColor = .systemBlue
         loadAllButton.layer.cornerRadius = 5
-
-
+        
+        
         loadAllButton.snp.makeConstraints {
             $0.bottom.equalToSuperview().offset(-30)
             $0.left.equalToSuperview().offset(20)
@@ -43,7 +44,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             $0.height.equalTo(45)
         }
         
-    
+        loadAllButton.addTarget(self, action: #selector(selectedAllLoadButton), for: .touchUpInside)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -56,5 +57,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return cell
     }
     
+    @objc func selectedAllLoadButton(sender: UIButton!) {
+        for index in 0..<5 {
+            guard let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? ImageCell else { return }
+            cell.selectedLoadButton(sender: sender)
+        }
+    }
 }
 

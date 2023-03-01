@@ -24,13 +24,14 @@ class ImageCell: UITableViewCell {
             $0.right.equalToSuperview().offset(-15)
             $0.bottom.equalToSuperview().offset(-15)
         }
-        
     
         return stackView
     }()
     
     lazy var loadImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "common"))
+        let imageView = UIImageView(image: UIImage(systemName: "photo"))
+        imageView.contentMode = .scaleToFill
+        
         imageView.snp.makeConstraints {
             $0.width.equalTo(130)
             $0.height.equalTo(100)
@@ -58,8 +59,10 @@ class ImageCell: UITableViewCell {
         button.snp.makeConstraints {
             $0.width.equalTo(80)
             $0.height.equalTo(40)
-            
         }
+        
+        button.addTarget(self, action: #selector(selectedLoadButton), for: .touchUpInside)
+        
         return button
     }()
    
@@ -72,5 +75,28 @@ class ImageCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func selectedLoadButton(sender: UIButton!) {
+        let url = URL(string: "https://picsum.photos/200/300")!
+        
+//        DispatchQueue.global().async {
+//            let data = try! Data(contentsOf: url)
+//            let image = UIImage(data: data)
+//
+//            DispatchQueue.main.async {
+//                self.loadImageView.image = image
+//            }
+//        }
+        URLSession.shared.downloadTask(with: url, completionHandler: { (location, reponse, error) -> Void in
+            if let data = try? Data(contentsOf: url) {
+                let image = UIImage(data: data)
+
+                DispatchQueue.main.async {
+                    self.loadImageView.image = image
+                }
+            }
+        }).resume()
+        
     }
 }
