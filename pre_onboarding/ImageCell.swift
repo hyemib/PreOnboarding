@@ -70,7 +70,6 @@ class ImageCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         contentView.addSubview(stackView)
-        
     }
     
     required init?(coder: NSCoder) {
@@ -78,16 +77,10 @@ class ImageCell: UITableViewCell {
     }
     
     @objc func selectedLoadButton(sender: UIButton!) {
-        let url = URL(string: "https://picsum.photos/200/300")!
+        self.loadImageView.image = UIImage(systemName: "photo")
         
-//        DispatchQueue.global().async {
-//            let data = try! Data(contentsOf: url)
-//            let image = UIImage(data: data)
-//
-//            DispatchQueue.main.async {
-//                self.loadImageView.image = image
-//            }
-//        }
+        let url = URL(string: "https://picsum.photos/200/300")!
+
         URLSession.shared.downloadTask(with: url, completionHandler: { (location, reponse, error) -> Void in
             if let data = try? Data(contentsOf: url) {
                 let image = UIImage(data: data)
@@ -97,6 +90,5 @@ class ImageCell: UITableViewCell {
                 }
             }
         }).resume()
-        
     }
 }
